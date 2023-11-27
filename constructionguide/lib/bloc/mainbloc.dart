@@ -1,5 +1,6 @@
 import 'dart:developer';
 import 'package:constructionguide/models/commonmodel.dart';
+import 'package:constructionguide/models/employeeslistmodel.dart';
 import 'package:constructionguide/models/sitelistmodel.dart';
 import 'package:constructionguide/prefmanager/Prefmanager.dart';
 import 'package:constructionguide/sever/webclient.dart';
@@ -10,6 +11,7 @@ class MainBloc extends Bloc<MainEvents, MainStates> {
   MainBloc() : super(LoginInitial()) {
     on<VerifyAccount>(verifyaccount);
     on<GetSiteList>(getSiteList);
+    on<GetEmployeesList>(getEmployeesList);
   }
 }
 
@@ -63,6 +65,28 @@ Future<FutureOr<void>> getSiteList(
   }
 }
 
+Future<FutureOr<void>> getEmployeesList(
+    GetEmployeesList event, Emitter<MainStates> emit) async {
+  EmployeesListModel employeeslistmodel;
+
+  try {
+    emit(Loading());
+    employeeslistmodel = EmployeesListModel.fromJson(await WebClient.get(
+      '/client/workers/list',
+    ));
+    if (employeeslistmodel.status == true) {
+      emit(EmployeeslistSuccess(employeeslistmodel: employeeslistmodel));
+      print("Success");
+    } else {
+      print("Failed");
+      emit(EmployeeslistError());
+    }
+  } catch (e) {
+    emit(EmployeeslistError());
+    log("Exception on authentication : $e");
+  }
+}
+
 class MainStates {}
 
 class LoginInitial extends MainStates {}
@@ -110,4 +134,24 @@ class SitelistSuccess extends MainStates {
 class SitelistError extends MainStates {
   final String? error;
   SitelistError({this.error});
+}
+
+class GetEmployeesList extends MainEvents {
+  final String? name, status, phone, district;
+  GetEmployeesList({
+    this.name,
+    this.status,
+    this.phone,
+    this.district,
+  });
+}
+
+class EmployeeslistSuccess extends MainStates {
+  final EmployeesListModel employeeslistmodel;
+  EmployeeslistSuccess({required this.employeeslistmodel});
+}
+
+class EmployeeslistError extends MainStates {
+  final String? error;
+  EmployeeslistError({this.error});
 }

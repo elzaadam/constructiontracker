@@ -40,24 +40,49 @@ class _SplashcsreenState extends State<Splashcsreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-          child: Center(
-        child: Column(
-          //mainAxisAlignment: MainAxisAlignment.center,
-          //crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Container(
-                color: Colors.white,
-                height: MediaQuery.of(context).size.height / 2,
-                width: MediaQuery.of(context).size.width / 2,
-                child: Lottie.asset('assets/lotties/splash.json')),
-            const Text(
-              "Construction Tracker",
-              style: TextStyle(fontSize: 25),
+        backgroundColor: Colors.white,
+        body: SingleChildScrollView(
+          physics: const NeverScrollableScrollPhysics(),
+          child: Container(
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height,
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  Colors.white,
+                  Colors.white,
+                ],
+              ),
             ),
-          ],
-        ),
-      )),
-    );
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: MediaQuery.of(context).size.height / 2,
+                      color: Colors.white,
+                      child: Lottie.asset('assets/lotties/splash.json')),
+                  const Text(
+                    "Construction Tracker",
+                    style: TextStyle(fontSize: 25),
+                  ),
+                  const SizedBox(
+                    height: 2,
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ));
   }
 }
+
+
+//                 color: Colors.white,
+//                 height: MediaQuery.of(context).size.height / 2,
+//                 width: MediaQuery.of(context).size.width / 2,
+
