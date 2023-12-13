@@ -10,9 +10,9 @@ class WebClient {
   static const imageUrl = "https://parishprojects.herokuapp.com/file/get/";
 
   static Future<dynamic> post(url, data) async {
-    var token;
-    // await PrefManager.getToken();
-    // print(token + "ddd");
+    var token = await PrefManager.getToken();
+    log(token.toString());
+
     Map? sendData = {};
     if (data?.isNotEmpty ?? false) {
       sendData.addAll(data);

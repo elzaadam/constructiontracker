@@ -1,9 +1,10 @@
 import 'package:constructionguide/bloc/mainbloc.dart';
+import 'package:constructionguide/ui/employeedetails.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class Employeeslist extends StatefulWidget {
-  const Employeeslist({super.key}); 
+  const Employeeslist({super.key});
 
   @override
   State<Employeeslist> createState() => _EmployeeslistState();
@@ -23,67 +24,124 @@ class _EmployeeslistState extends State<Employeeslist> {
         backgroundColor: Colors.orange,
         title: const Text("Employees List"),
       ),
-      body: BlocConsumer<MainBloc, MainStates>(
-        buildWhen: (previous, current) =>
-            current is GetEmployeesList || current is EmployeeslistSuccess,
-        builder: (context, state) {
-          if (state is GetEmployeesList) {
-            return const CircularProgressIndicator();
-          } else if (state is EmployeeslistSuccess) {
-            return SizedBox(
-              height: MediaQuery.of(context).size.height * 2,
-              width: MediaQuery.of(context).size.width,
-              child: ListView.builder(
-                  scrollDirection: Axis.vertical,
-                  itemCount: state.employeeslistmodel.data!.length,
-                  itemBuilder: (BuildContext context, index) {
-                    return Padding(
-                      padding: const EdgeInsets.only(top: 10, left: 8.0),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(20),
-                        child: Container(
-                          height: MediaQuery.of(context).size.height / 8,
-                          width: MediaQuery.of(context).size.width / 4,
-                          decoration: BoxDecoration(
-                              border: Border.all(color: Colors.orange)),
-                          child: Row(
-                            children: [
-                              const Padding(
-                                padding: EdgeInsets.only(top: 1, left: 20),
-                                child: CircleAvatar(
-                                    radius: 2, child: Icon(Icons.person)),
-                              ),
-                              const SizedBox(width: 45),
-                              Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    const SizedBox(
-                                      height: 20,
+      body: SingleChildScrollView(
+        child: BlocConsumer<MainBloc, MainStates>(
+          buildWhen: (previous, current) =>
+              current is GetEmployeesList || current is EmployeeslistSuccess,
+          builder: (context, state) {
+            if (state is GetEmployeesList) {
+              return const CircularProgressIndicator();
+            } else if (state is EmployeeslistSuccess) {
+              return Center(
+                child: Column(
+                  children: [
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.05,
+                      width: MediaQuery.of(context).size.width / 1.1,
+                    ),
+                    Container(
+                      color: Colors.white,
+                      height: MediaQuery.of(context).size.height / 5,
+                      width: MediaQuery.of(context).size.width / 1.1,
+                      child: Image.asset("assets/images/employee.jpg"),
+                    ),
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.05,
+                      width: MediaQuery.of(context).size.width / 1.1,
+                    ),
+                    SizedBox(
+                      child: ListView.builder(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          scrollDirection: Axis.vertical,
+                          itemCount: state.employeeslistmodel.data!.length,
+                          itemBuilder: (BuildContext context, index) {
+                            return InkWell(
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => Employeedetails(
+                                            id: state.employeeslistmodel
+                                                .data![index].sId)));
+                                // print(state.sitelistmodel.data![index].sId);
+                                print(
+                                    state.employeeslistmodel.data![index].sId);
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.only(
+                                    top: 10, left: 15, bottom: 10, right: 15),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(20),
+                                  child: Container(
+                                    //height: MediaQuery.of(context).size.height /
+                                    // 6.2,
+                                    width:
+                                        MediaQuery.of(context).size.width / 4,
+                                    decoration: BoxDecoration(
+                                        border:
+                                            Border.all(color: Colors.orange)),
+                                    child: Row(
+                                      children: [
+                                        const Padding(
+                                          padding: EdgeInsets.only(left: 20),
+                                          child: CircleAvatar(
+                                              radius: 2,
+                                              child: Icon(Icons.person)),
+                                        ),
+                                        SizedBox(
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width /
+                                              6,
+                                        ),
+                                        Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              SizedBox(
+                                                height: MediaQuery.of(context)
+                                                        .size
+                                                        .height /
+                                                    30,
+                                              ),
+                                              //Text(state.employeeslistmodel.data![index].nam),
+                                              Text(state.employeeslistmodel
+                                                  .data![index].name
+                                                  .toString()),
+                                              Text(state.employeeslistmodel
+                                                  .data![index].status
+                                                  .toString()),
+                                              Text(state.employeeslistmodel
+                                                  .data![index].userId!.phone
+                                                  .toString()),
+                                              Text(state.employeeslistmodel
+                                                  .data![index].gender
+                                                  .toString()),
+                                              SizedBox(
+                                                  height: MediaQuery.of(context)
+                                                          .size
+                                                          .height /
+                                                      30),
+                                            ]),
+                                      ],
                                     ),
-                                    //Text(state.employeeslistmodel.data![index].nam),
-                                    Text(state
-                                        .employeeslistmodel.data![index].name
-                                        .toString()),
-                                    Text(state
-                                        .employeeslistmodel.data![index].status
-                                        .toString()),
-                                    Text(state.employeeslistmodel.data![index]
-                                        .userId!.phone
-                                        .toString()),
-                                  ]),
-                            ],
-                          ),
-                        ),
-                      ),
-                    );
-                    //child: Text("Item $index: $item"));
-                  }),
-            );
-          } else {
-            return const SizedBox.shrink();
-          }
-        },
-        listener: (context, state) {},
+                                  ),
+                                ),
+                              ),
+                            );
+                            //child: Text("Item $index: $item"));
+                          }),
+                    ),
+                  ],
+                ),
+              );
+            } else {
+              return const SizedBox.shrink();
+            }
+          },
+          listener: (context, state) {},
+        ),
       ),
     );
   }

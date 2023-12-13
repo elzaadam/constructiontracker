@@ -44,6 +44,7 @@ dependencies:
   shared_preferences: ^2.0.9
   http: ^0.13.3
   fluttertoast: ^8.0.7
+  geolocator: ^10.1.0 
   
 dev_dependencies:
   flutter_test:
@@ -73,6 +74,9 @@ flutter:
     - assets/images/login.jpg
     - assets/images/construction1.jpg
     - assets/images/signin.jpg
+    - assets/images/construction3.jpg
+    - assets/images/employee.jpg
+    - assets/images/images2.jpeg
     - assets/lotties/splashimage.json
     - assets/lotties/splash.json
       # - assets/images/login2.jpeg
