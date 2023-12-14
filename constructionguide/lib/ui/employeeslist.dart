@@ -1,5 +1,5 @@
 import 'package:constructionguide/bloc/mainbloc.dart';
-import 'package:constructionguide/ui/employeedetails.dart';
+import 'package:constructionguide/ui/addemployees.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -56,76 +56,60 @@ class _EmployeeslistState extends State<Employeeslist> {
                           scrollDirection: Axis.vertical,
                           itemCount: state.employeeslistmodel.data!.length,
                           itemBuilder: (BuildContext context, index) {
-                            return InkWell(
-                              onTap: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => Employeedetails(
-                                            id: state.employeeslistmodel
-                                                .data![index].sId)));
-                                // print(state.sitelistmodel.data![index].sId);
-                                print(
-                                    state.employeeslistmodel.data![index].sId);
-                              },
-                              child: Padding(
-                                padding: const EdgeInsets.only(
-                                    top: 10, left: 15, bottom: 10, right: 15),
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(20),
-                                  child: Container(
-                                    //height: MediaQuery.of(context).size.height /
-                                    // 6.2,
-                                    width:
-                                        MediaQuery.of(context).size.width / 4,
-                                    decoration: BoxDecoration(
-                                        border:
-                                            Border.all(color: Colors.orange)),
-                                    child: Row(
-                                      children: [
-                                        const Padding(
-                                          padding: EdgeInsets.only(left: 20),
-                                          child: CircleAvatar(
-                                              radius: 2,
-                                              child: Icon(Icons.person)),
-                                        ),
-                                        SizedBox(
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width /
-                                              6,
-                                        ),
-                                        Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              SizedBox(
+                            return Padding(
+                              padding: const EdgeInsets.only(
+                                  top: 10, left: 15, bottom: 10, right: 15),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(20),
+                                child: Container(
+                                  //height: MediaQuery.of(context).size.height /
+                                  // 6.2,
+                                  width: MediaQuery.of(context).size.width / 4,
+                                  decoration: BoxDecoration(
+                                      border: Border.all(color: Colors.orange)),
+                                  child: Row(
+                                    children: [
+                                      const Padding(
+                                        padding: EdgeInsets.only(left: 20),
+                                        child: CircleAvatar(
+                                            radius: 2,
+                                            child: Icon(Icons.person)),
+                                      ),
+                                      SizedBox(
+                                        width:
+                                            MediaQuery.of(context).size.width /
+                                                6,
+                                      ),
+                                      Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            SizedBox(
+                                              height: MediaQuery.of(context)
+                                                      .size
+                                                      .height /
+                                                  30,
+                                            ),
+                                            //Text(state.employeeslistmodel.data![index].nam),
+                                            Text(state.employeeslistmodel
+                                                .data![index].name
+                                                .toString()),
+                                            Text(state.employeeslistmodel
+                                                .data![index].status
+                                                .toString()),
+                                            Text(state.employeeslistmodel
+                                                .data![index].userId!.phone
+                                                .toString()),
+                                            Text(state.employeeslistmodel
+                                                .data![index].gender
+                                                .toString()),
+                                            SizedBox(
                                                 height: MediaQuery.of(context)
                                                         .size
                                                         .height /
-                                                    30,
-                                              ),
-                                              //Text(state.employeeslistmodel.data![index].nam),
-                                              Text(state.employeeslistmodel
-                                                  .data![index].name
-                                                  .toString()),
-                                              Text(state.employeeslistmodel
-                                                  .data![index].status
-                                                  .toString()),
-                                              Text(state.employeeslistmodel
-                                                  .data![index].userId!.phone
-                                                  .toString()),
-                                              Text(state.employeeslistmodel
-                                                  .data![index].gender
-                                                  .toString()),
-                                              SizedBox(
-                                                  height: MediaQuery.of(context)
-                                                          .size
-                                                          .height /
-                                                      30),
-                                            ]),
-                                      ],
-                                    ),
+                                                    30),
+                                          ]),
+                                    ],
                                   ),
                                 ),
                               ),
@@ -142,6 +126,34 @@ class _EmployeeslistState extends State<Employeeslist> {
           },
           listener: (context, state) {},
         ),
+      ),
+      floatingActionButton: SizedBox(
+        width: MediaQuery.of(context).size.width / 2.5,
+        child: FloatingActionButton(
+            backgroundColor: Colors.orange,
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const Addemployees()));
+            },
+            child: const Row(
+              children: [
+                Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Icon(
+                    Icons.add,
+                    color: Colors.white,
+                  ),
+                ),
+                Text(
+                  "Add Employees",
+                  style: TextStyle(color: Colors.white),
+                ),
+              ],
+            )),
       ),
     );
   }

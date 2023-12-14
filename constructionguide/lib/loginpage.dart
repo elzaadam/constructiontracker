@@ -21,7 +21,7 @@ class _LoginpageState extends State<Loginpage> {
     return Scaffold(
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.only(top: 100),
+          padding: const EdgeInsets.only(top: 100, left: 10, right: 10),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -30,40 +30,34 @@ class _LoginpageState extends State<Loginpage> {
                 radius: 200,
                 backgroundImage: AssetImage('assets/images/login2.jpeg'),
               ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: TextFormField(
-                  controller: usernamecontroller,
-                  decoration: const InputDecoration(
-                      hintText: 'UserName',
-                      border: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Colors.orange,
-                            width: 5,
-                          ),
-                          borderRadius: BorderRadius.all(Radius.circular(10)))),
-                ),
+              TextFormField(
+                controller: usernamecontroller,
+                decoration: InputDecoration(
+                    hintText: 'UserName',
+                    focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(5),
+                        borderSide: const BorderSide(color: Colors.orange)),
+                    enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(5),
+                        borderSide: const BorderSide(color: Colors.orange))),
               ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: TextFormField(
-                  controller: passwordcontroller,
-                  decoration: InputDecoration(
-                      suffixIcon: const Icon(
-                        Icons.lock,
-                        color: Colors.orange,
-                      ),
-                      hintText: 'Password',
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: const BorderSide(
-                          color: Colors.orange,
-                          width: 1,
-                        ),
-                      ),
-                      filled: true,
-                      fillColor: Colors.white),
-                ),
+              SizedBox(
+                height: screenSize.height / 30,
+              ),
+              TextFormField(
+                controller: passwordcontroller,
+                decoration: InputDecoration(
+                    suffixIcon: const Icon(
+                      Icons.lock,
+                      color: Colors.orange,
+                    ),
+                    hintText: 'Password',
+                    focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(5),
+                        borderSide: const BorderSide(color: Colors.orange)),
+                    enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(5),
+                        borderSide: const BorderSide(color: Colors.orange))),
               ),
               SizedBox(
                 height: screenSize.height / 30,
@@ -76,6 +70,7 @@ class _LoginpageState extends State<Loginpage> {
                 height: screenSize.height / 30,
               ),
               MaterialButton(
+                minWidth: double.infinity,
                 color: Colors.yellow,
                 onPressed: () {
                   BlocProvider.of<MainBloc>(context).add(VerifyAccount(
@@ -100,8 +95,6 @@ class _LoginpageState extends State<Loginpage> {
                             MaterialPageRoute(
                                 builder: (context) => const Homepage()));
                       } else {
-                        
-
                         print('Error');
                         // Navigator.push(
                         //     context,

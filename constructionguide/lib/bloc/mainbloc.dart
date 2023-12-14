@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'package:constructionguide/models/categorymodel.dart';
 import 'package:constructionguide/models/commonmodel.dart';
 import 'package:constructionguide/models/employeeslistmodel.dart';
 import 'package:constructionguide/models/sitedetailsmodel.dart';
@@ -9,142 +10,203 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'dart:async';
 
 class MainBloc extends Bloc<MainEvents, MainStates> {
-  MainBloc() : super(LoginInitial()) {
+  String? workId;
+  MainBloc() : super(MainStates()) {
     on<VerifyAccount>(verifyaccount);
     on<GetSiteList>(getSiteList);
     on<GetSiteDetails>(getSiteDetails);
     on<VerifyNewSite>(verifyNewSite);
     on<GetEmployeesList>(getEmployeesList);
+    on<VerifyNewEmployee>(verifyNewEmployee);
+    on<Categorylist>(categorylist);
   }
-}
 
-Future<FutureOr<void>> verifyaccount(
-    VerifyAccount event, Emitter<MainStates> emit) async {
-  Commonmodel commonmodel;
-  // emit(abd());
-  Map map = {"phone": event.name, "password": event.password};
-  print(map);
-  try {
-    emit(Loading());
-    commonmodel = Commonmodel.fromJson(await WebClient.post(
-      '/user/login',
-      map,
-    ));
-    if (commonmodel.status == true) {
-      await PrefManager.setToken(commonmodel.token.toString());
-      //  Helper.showToast(msg: "OTP Successfully sent");
-      var token = await PrefManager.getToken();
-      log(token.toString());
-      emit(LoginSuccess());
-    } else {
+  Future<FutureOr<void>> verifyaccount(
+      VerifyAccount event, Emitter<MainStates> emit) async {
+    Commonmodel commonmodel;
+    // emit(abd());
+    Map map = {"phone": event.name, "password": event.password};
+    print(map);
+    try {
+      emit(Loading());
+      commonmodel = Commonmodel.fromJson(await WebClient.post(
+        '/user/login',
+        map,
+      ));
+      if (commonmodel.status == true) {
+        await PrefManager.setToken(commonmodel.token.toString());
+        //  Helper.showToast(msg: "OTP Successfully sent");
+        var token = await PrefManager.getToken();
+        log(token.toString());
+        emit(LoginSuccess());
+      } else {
+        emit(LoginError());
+      }
+    } catch (e) {
       emit(LoginError());
+      log("Exception on authentication : $e");
     }
-  } catch (e) {
-    emit(LoginError());
-    log("Exception on authentication : $e");
   }
-}
 
-Future<FutureOr<void>> getSiteList(
-    GetSiteList event, Emitter<MainStates> emit) async {
-  Sitetlistmodel sitelistmodel;
-  // emit(abd());
+  Future<FutureOr<void>> getSiteList(
+      GetSiteList event, Emitter<MainStates> emit) async {
+    Sitetlistmodel sitelistmodel;
+    // emit(abd());
 
-  try {
-    emit(Loading());
-    sitelistmodel = Sitetlistmodel.fromJson(await WebClient.get(
-      '/client/site/list',
-    ));
-    if (sitelistmodel.status == true) {
-      emit(SitelistSuccess(sitelistmodel: sitelistmodel));
-      print("Success");
-    } else {
-      print("Failed");
+    try {
+      emit(Loading());
+      sitelistmodel = Sitetlistmodel.fromJson(await WebClient.get(
+        '/client/site/list',
+      ));
+      if (sitelistmodel.status == true) {
+        emit(SitelistSuccess(sitelistmodel: sitelistmodel));
+        print("Success");
+      } else {
+        print("Failed");
+        emit(SitelistError());
+      }
+    } catch (e) {
       emit(SitelistError());
+      log("Exception on authentication : $e");
     }
-  } catch (e) {
-    emit(SitelistError());
-    log("Exception on authentication : $e");
   }
-}
 
-Future<FutureOr<void>> verifyNewSite(
-    VerifyNewSite event, Emitter<MainStates> emit) async {
-  Commonmodel commonmodel;
+  Future<FutureOr<void>> verifyNewSite(
+      VerifyNewSite event, Emitter<MainStates> emit) async {
+    Commonmodel commonmodel;
 
-  // emit(abd());
-  Map map = {
-    "siteName": event.siteName,
-    "siteLocation": event.siteLocation,
-    "work": event.work,
-    "siteContactAddress": event.siteContactAddress,
-    "siteContactPhone": event.siteContactPhone,
-    "contactPersonName": event.contactPersonName,
-    "lat": event.lat,
-    "lon": event.lon,
-  };
-  print(map);
-  try {
-    emit(Loading());
-    commonmodel = Commonmodel.fromJson(await WebClient.post(
-      '/client/add/site',
-      map,
-    ));
-    if (commonmodel.status == true) {
-      emit(AddSiteSuccess());
-    } else {
+    // emit(abd());
+    Map map = {
+      "siteName": event.siteName,
+      "siteLocation": event.siteLocation,
+      "work": event.work,
+      "siteContactAddress": event.siteContactAddress,
+      "siteContactPhone": event.siteContactPhone,
+      "contactPersonName": event.contactPersonName,
+      "lat": event.lat,
+      "lon": event.lon,
+    };
+    print(map);
+    try {
+      emit(Loading());
+      commonmodel = Commonmodel.fromJson(await WebClient.post(
+        '/client/add/site',
+        map,
+      ));
+      if (commonmodel.status == true) {
+        emit(AddSiteSuccess());
+      } else {
+        emit(AddingSiteError());
+      }
+    } catch (e) {
       emit(AddingSiteError());
+      log("Exception on authentication : $e");
     }
-  } catch (e) {
-    emit(AddingSiteError());
-    log("Exception on authentication : $e");
   }
-}
 
-Future<FutureOr<void>> getSiteDetails(
-    GetSiteDetails event, Emitter<MainStates> emit) async {
-  Sitedetailsmodel sitedetailsmodel;
-  // emit(abd());
-  Map map = {
-    "id": event.id,
-  };
-  print(map);
-  try {
-    emit(Loading());
-    sitedetailsmodel = Sitedetailsmodel.fromJson(await WebClient.post(
-      '/client/site/view',
-      map,
-    ));
-    if (sitedetailsmodel.status == true) {
-      emit(SitedetailsSuccess(sitedetailsmodel: sitedetailsmodel));
-    } else {
+  Future<FutureOr<void>> getSiteDetails(
+      GetSiteDetails event, Emitter<MainStates> emit) async {
+    Sitedetailsmodel sitedetailsmodel;
+    // emit(abd());
+    Map map = {
+      "id": event.id,
+    };
+    print(map);
+    try {
+      emit(Loading());
+      sitedetailsmodel = Sitedetailsmodel.fromJson(await WebClient.post(
+        '/client/site/view',
+        map,
+      ));
+      if (sitedetailsmodel.status == true) {
+        emit(SitedetailsSuccess(sitedetailsmodel: sitedetailsmodel));
+      } else {
+        emit(SitedetailsError());
+      }
+    } catch (e) {
       emit(SitedetailsError());
+      log("Exception on authentication : $e");
     }
-  } catch (e) {
-    emit(SitedetailsError());
-    log("Exception on authentication : $e");
   }
-}
 
-Future<FutureOr<void>> getEmployeesList(
-    GetEmployeesList event, Emitter<MainStates> emit) async {
-  EmployeesListModel employeeslistmodel;
+  Future<FutureOr<void>> getEmployeesList(
+      GetEmployeesList event, Emitter<MainStates> emit) async {
+    EmployeesListModel employeeslistmodel;
 
-  try {
-    emit(Loading());
-    employeeslistmodel = EmployeesListModel.fromJson(await WebClient.get(
-      '/client/workers/list',
-    ));
-    if (employeeslistmodel.status == true) {
-      emit(EmployeeslistSuccess(employeeslistmodel: employeeslistmodel));
-      print("Success");
-    } else {
-      print("Failed");
+    try {
+      emit(Loading());
+      employeeslistmodel = EmployeesListModel.fromJson(await WebClient.get(
+        '/client/workers/list',
+      ));
+      if (employeeslistmodel.status == true) {
+        emit(EmployeeslistSuccess(employeeslistmodel: employeeslistmodel));
+        print("Success");
+      } else {
+        print("Failed");
+        emit(EmployeeslistError());
+      }
+    } catch (e) {
       emit(EmployeeslistError());
+      log("Exception on authentication : $e");
     }
-  } catch (e) {
-    emit(EmployeeslistError());
-    log("Exception on authentication : $e");
+  }
+
+///////////////////////////////////////
+///////////////////////////////////////
+  Future<FutureOr<void>> categorylist(
+      Categorylist event, Emitter<MainStates> emit) async {
+    Categorymodel categorymodel;
+
+    try {
+      emit(Categoryloading());
+      categorymodel = Categorymodel.fromJson(await WebClient.get(
+        '/category/list',
+      ));
+      if (categorymodel.status == true) {
+        workId = categorymodel.data![0].sId!.toString();
+        emit(CategorylistSuccess(categorymodel: categorymodel));
+        print("Success");
+      } else {
+        print("Failed");
+        emit(CategorylistError());
+      }
+    } catch (e) {
+      emit(EmployeeslistError());
+      log("Exception on authentication : $e");
+    }
+  }
+
+  Future<FutureOr<void>> verifyNewEmployee(
+      VerifyNewEmployee event, Emitter<MainStates> emit) async {
+    Commonmodel commonmodel;
+    Map map = {
+      "name": event.name,
+      "gender": event.gender,
+      "addess": event.address,
+      "password": event.password,
+      "dailyWage": event.dailywage,
+      "workTypeId": workId,
+      "overtimeAmount": event.overtimeAmount,
+      "phone": event.phonenumber,
+      "district": event.district,
+      "state": event.state,
+    };
+    print(map);
+    try {
+      emit(Loading());
+      commonmodel = Commonmodel.fromJson(await WebClient.post(
+        '/client/add/worker',
+        map,
+      ));
+      if (commonmodel.status == true) {
+        emit(AddEmployeeSuccess());
+      } else {
+        emit(AddingEmployeeError());
+      }
+    } catch (e) {
+      emit(AddingEmployeeError());
+      log("Exception on authentication : $e");
+    }
   }
 }
 
@@ -268,4 +330,48 @@ class EmployeeslistSuccess extends MainStates {
 class EmployeeslistError extends MainStates {
   final String? error;
   EmployeeslistError({this.error});
+}
+
+class Categorylist extends MainEvents {}
+
+class Categoryloading extends MainStates {}
+
+class CategorylistSuccess extends MainStates {
+  final Categorymodel categorymodel;
+  CategorylistSuccess({required this.categorymodel});
+}
+
+class CategorylistError extends MainStates {
+  final String? error;
+  CategorylistError({this.error});
+}
+
+class VerifyNewEmployee extends MainEvents {
+  final String? name,
+      gender,
+      address,
+      password,
+      dailywage,
+      overtimeAmount,
+      phonenumber,
+      district,
+      state;
+
+  VerifyNewEmployee(
+      {this.name,
+      this.gender,
+      this.address,
+      this.password,
+      this.dailywage,
+      this.overtimeAmount,
+      this.phonenumber,
+      this.district,
+      this.state});
+}
+
+class AddEmployeeSuccess extends MainStates {}
+
+class AddingEmployeeError extends MainStates {
+  final String? error;
+  AddingEmployeeError({this.error});
 }

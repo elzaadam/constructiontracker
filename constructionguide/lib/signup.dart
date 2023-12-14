@@ -28,17 +28,20 @@ class _SignupState extends State<Signup> {
       body: SingleChildScrollView(
         child: Form(
           key: _formKey,
-          child: Column(children: [
-            const Padding(
-              padding: EdgeInsets.only(top: 80, left: 50),
-              child: CircleAvatar(
-                radius: 125,
-                backgroundImage: AssetImage('assets/images/signin.jpg'),
+          child: Padding(
+            padding: const EdgeInsets.only(left: 10, right: 10),
+            child: Column(children: [
+              const Padding(
+                padding: EdgeInsets.only(top: 80, left: 50),
+                child: CircleAvatar(
+                  radius: 125,
+                  backgroundImage: AssetImage('assets/images/signin.jpg'),
+                ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: TextFormField(
+              SizedBox(
+                height: screenSize.height / 80,
+              ),
+              TextFormField(
                 keyboardType: TextInputType.name,
                 decoration: InputDecoration(
                     hintText: 'First Name',
@@ -51,10 +54,10 @@ class _SignupState extends State<Signup> {
                   return null;
                 },
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: TextFormField(
+              SizedBox(
+                height: screenSize.height / 80,
+              ),
+              TextFormField(
                 keyboardType: TextInputType.name,
                 decoration: InputDecoration(
                     hintText: 'Last Name',
@@ -67,10 +70,10 @@ class _SignupState extends State<Signup> {
                   return null;
                 },
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: TextFormField(
+              SizedBox(
+                height: screenSize.height / 80,
+              ),
+              TextFormField(
                 autovalidateMode: AutovalidateMode.onUserInteraction,
                 decoration: InputDecoration(
                     hintText: 'Email Id',
@@ -89,10 +92,10 @@ class _SignupState extends State<Signup> {
                   return null;
                 },
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: TextFormField(
+              SizedBox(
+                height: screenSize.height / 80,
+              ),
+              TextFormField(
                 keyboardType: TextInputType.number,
                 autovalidateMode: AutovalidateMode.onUserInteraction,
                 decoration: InputDecoration(
@@ -108,10 +111,10 @@ class _SignupState extends State<Signup> {
                   return null;
                 },
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: TextFormField(
+              SizedBox(
+                height: screenSize.height / 80,
+              ),
+              TextFormField(
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                   decoration: InputDecoration(
                       hintText: 'Password',
@@ -125,47 +128,47 @@ class _SignupState extends State<Signup> {
                     }
                     return null;
                   }),
-            ),
-            SizedBox(
-              height: screenSize.height / 80,
-            ),
-            Row(
-              children: [
-                Checkbox(
-                    activeColor: Colors.orange,
-                    value: checkedvalue,
-                    onChanged: (newvalue) {
-                      setState(() {
-                        checkedvalue = newvalue;
-                      });
-                    }),
-                const Text(
-                  "By Signing Up, You Are Agree To Our Terms & Privacy Policy",
-                  style: TextStyle(fontSize: 12),
-                )
-              ],
-            ),
-            SizedBox(
-              height: screenSize.height / 80,
-            ),
-            Container(
-              height: screenSize.height / 20,
-              width: screenSize.width * 0.95,
-              color: Colors.white,
-              child: ElevatedButton(
-                  onPressed: () {
-                    final isValid = _formKey.currentState?.validate();
-                    if (!isValid!) {
-                      return;
-                    }
-                    _formKey.currentState?.save();
+              SizedBox(
+                height: screenSize.height / 80,
+              ),
+              Row(
+                children: [
+                  Checkbox(
+                      activeColor: Colors.orange,
+                      value: checkedvalue,
+                      onChanged: (newvalue) {
+                        setState(() {
+                          checkedvalue = newvalue;
+                        });
+                      }),
+                  const Text(
+                    "By Signing Up, You Are Agree To Our Terms & Privacy Policy",
+                    style: TextStyle(fontSize: 12),
+                  )
+                ],
+              ),
+              SizedBox(
+                height: screenSize.height / 80,
+              ),
+              Container(
+                height: screenSize.height / 20,
+                width: screenSize.width * 0.95,
+                color: Colors.white,
+                child: ElevatedButton(
+                    onPressed: () {
+                      final isValid = _formKey.currentState?.validate();
+                      if (!isValid!) {
+                        return;
+                      }
+                      _formKey.currentState?.save();
 
-                    //const Loginpage();
-                  },
-                  child: const Text("Submit",
-                      style: TextStyle(color: Colors.orange))),
-            ),
-          ]),
+                      //const Loginpage();
+                    },
+                    child: const Text("Submit",
+                        style: TextStyle(color: Colors.orange))),
+              ),
+            ]),
+          ),
         ),
       ),
     );

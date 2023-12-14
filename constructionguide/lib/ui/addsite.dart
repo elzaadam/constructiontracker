@@ -46,168 +46,157 @@ class _AddsiteState extends State<Addsite> {
           title: const Text("New Site"),
         ),
         body: SingleChildScrollView(
-          child: Center(
+          child: Padding(
+            padding: const EdgeInsets.only(left: 10, right: 10),
             child: Column(
               children: [
                 SizedBox(
                   height: MediaQuery.of(context).size.height / 20,
                 ),
-                Container(
-                  width: MediaQuery.of(context).size.width / 1.1,
-                  color: Colors.white,
-                  child: TextFormField(
-                    controller: projectnamecontroller,
-                    decoration: InputDecoration(
-                        hintText: 'Project Name',
-                        enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(5),
-                            borderSide:
-                                const BorderSide(color: Colors.orange))),
-                  ),
+                TextFormField(
+                  controller: projectnamecontroller,
+                  decoration: InputDecoration(
+                      hintText: 'Project Name',
+                      focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(5),
+                          borderSide: const BorderSide(color: Colors.orange)),
+                      enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(5),
+                          borderSide: const BorderSide(color: Colors.orange))),
                 ),
 
                 SizedBox(
                   height: MediaQuery.of(context).size.height / 30,
                 ),
-                Container(
-                  width: MediaQuery.of(context).size.width / 1.1,
-                  color: Colors.white,
-                  child: TextFormField(
-                    controller: addresscontroller,
-                    decoration: InputDecoration(
-                        hintText: 'Address',
-                        enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(5),
-                            borderSide:
-                                const BorderSide(color: Colors.orange))),
-                  ),
+                TextFormField(
+                  controller: addresscontroller,
+                  decoration: InputDecoration(
+                      hintText: 'Address',
+                      focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(5),
+                          borderSide: const BorderSide(color: Colors.orange)),
+                      enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(5),
+                          borderSide: const BorderSide(color: Colors.orange))),
                 ),
                 SizedBox(
                   height: MediaQuery.of(context).size.height / 30,
                 ),
-                Container(
-                  width: MediaQuery.of(context).size.width / 1.1,
-                  color: Colors.white,
-                  child: TextFormField(
-                    controller: citycontroller,
-                    decoration: InputDecoration(
-                        hintText: 'City',
-                        enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(5),
-                            borderSide:
-                                const BorderSide(color: Colors.orange))),
-                  ),
+                TextFormField(
+                  controller: citycontroller,
+                  decoration: InputDecoration(
+                      hintText: 'City',
+                      focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(5),
+                          borderSide: const BorderSide(color: Colors.orange)),
+                      enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(5),
+                          borderSide: const BorderSide(color: Colors.orange))),
                 ),
                 SizedBox(
                   height: MediaQuery.of(context).size.height / 30,
                 ),
-                Container(
-                    width: MediaQuery.of(context).size.width / 1.1,
-                    color: Colors.white,
-                    child: TextFormField(
-                        controller: dateController,
-                        decoration: InputDecoration(
-                          suffixIcon: const Icon(Icons.calendar_month),
-                          hintText: 'Project Started',
-                          enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(5),
-                              borderSide:
-                                  const BorderSide(color: Colors.orange)),
-                        ),
-                        readOnly: true,
-                        onTap: () async {
-                          DateTime? pickedDate = await showDatePicker(
-                            context: context,
-                            initialDate: DateTime.now(),
-                            firstDate: DateTime(2000),
-                            lastDate: DateTime.now(),
-                            builder: (BuildContext context, Widget? child) {
-                              return Theme(
-                                data: ThemeData.light().copyWith(
-                                  colorScheme: ColorScheme.fromSwatch(
-                                    primarySwatch: Colors.orange,
-                                    // primaryColorDark: Colors.teal,
-                                    accentColor: Colors.yellow,
-                                  ),
-                                  dialogBackgroundColor: Colors.white,
-                                ),
-                                child: child!,
-                              );
-                            },
+                TextFormField(
+                    controller: dateController,
+                    decoration: InputDecoration(
+                      suffixIcon: const Icon(Icons.calendar_month),
+                      hintText: 'Project Started',
+                      focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(5),
+                          borderSide: const BorderSide(color: Colors.orange)),
+                      enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(5),
+                          borderSide: const BorderSide(color: Colors.orange)),
+                    ),
+                    readOnly: true,
+                    onTap: () async {
+                      DateTime? pickedDate = await showDatePicker(
+                        context: context,
+                        initialDate: DateTime.now(),
+                        firstDate: DateTime(2000),
+                        lastDate: DateTime.now(),
+                        builder: (BuildContext context, Widget? child) {
+                          return Theme(
+                            data: ThemeData.light().copyWith(
+                              colorScheme: ColorScheme.fromSwatch(
+                                primarySwatch: Colors.orange,
+                                // primaryColorDark: Colors.teal,
+                                accentColor: Colors.yellow,
+                              ),
+                              dialogBackgroundColor: Colors.white,
+                            ),
+                            child: child!,
                           );
-                          if (pickedDate != null) {
-                            print(pickedDate);
-                            String formattedDate =
-                                DateFormat("yyyy - MM - dd").format(pickedDate);
-                            print(formattedDate);
-                            setState(() {
-                              dateController.text = formattedDate;
-                            });
-                          } else {
-                            print("Date not selected");
-                          }
-                        })),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height / 30,
-                ),
-                Container(
-                  width: MediaQuery.of(context).size.width / 1.1,
-                  color: Colors.white,
-                  child: TextFormField(
-                    controller: valuecontroller,
-                    decoration: InputDecoration(
-                        hintText: 'Project Value',
-                        enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(5),
-                            borderSide:
-                                const BorderSide(color: Colors.orange))),
-                  ),
-                ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height / 30,
-                ),
-                Container(
-                  width: MediaQuery.of(context).size.width / 1.1,
-                  color: Colors.white,
-                  child: TextFormField(
-                    controller: clientname,
-                    decoration: InputDecoration(
-                        hintText: 'Client Name',
-                        enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(5),
-                            borderSide:
-                                const BorderSide(color: Colors.orange))),
-                  ),
-                ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height / 30,
-                ),
-                Container(
-                  width: MediaQuery.of(context).size.width / 1.1,
-                  color: Colors.white,
-                  child: TextFormField(
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
-                    controller: phonenumbercontroller,
-                    decoration: InputDecoration(
-                        hintText: 'Client Mobile number',
-                        enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(5),
-                            borderSide:
-                                const BorderSide(color: Colors.orange))),
-                    validator: (value) {
-                      if (value!.length > 10) {
-                        return 'Please enter the phone number';
-                      } else if (!RegExp(r'^\d{10}$').hasMatch(value)) {
-                        return 'Please enter a valid 10-digit phone number';
+                        },
+                      );
+                      if (pickedDate != null) {
+                        print(pickedDate);
+                        String formattedDate =
+                            DateFormat("yyyy - MM - dd").format(pickedDate);
+                        print(formattedDate);
+                        setState(() {
+                          dateController.text = formattedDate;
+                        });
+                      } else {
+                        print("Date not selected");
                       }
-                      return null;
-                    },
-                  ),
+                    }),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height / 30,
+                ),
+                TextFormField(
+                  controller: valuecontroller,
+                  decoration: InputDecoration(
+                      hintText: 'Project Value',
+                      focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(5),
+                          borderSide: const BorderSide(color: Colors.orange)),
+                      enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(5),
+                          borderSide: const BorderSide(color: Colors.orange))),
+                ),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height / 30,
+                ),
+                TextFormField(
+                  controller: clientname,
+                  decoration: InputDecoration(
+                      hintText: 'Client Name',
+                      focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(5),
+                          borderSide: const BorderSide(color: Colors.orange)),
+                      enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(5),
+                          borderSide: const BorderSide(color: Colors.orange))),
+                ),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height / 30,
+                ),
+                TextFormField(
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  controller: phonenumbercontroller,
+                  decoration: InputDecoration(
+                      hintText: 'Client Mobile number',
+                      focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(5),
+                          borderSide: const BorderSide(color: Colors.orange)),
+                      enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(5),
+                          borderSide: const BorderSide(color: Colors.orange))),
+                  validator: (value) {
+                    if (value!.length > 10) {
+                      return 'Please enter the phone number';
+                    } else if (!RegExp(r'^\d{10}$').hasMatch(value)) {
+                      return 'Please enter a valid 10-digit phone number';
+                    }
+                    return null;
+                  },
                 ),
                 SizedBox(
                   height: MediaQuery.of(context).size.height / 20,
                 ),
                 MaterialButton(
+                  minWidth: double.infinity,
                   color: Colors.orange,
                   onPressed: () {
                     BlocProvider.of<MainBloc>(context).add(VerifyNewSite(
