@@ -22,6 +22,8 @@ class _AddsiteState extends State<Addsite> {
   final TextEditingController valuecontroller = TextEditingController();
   final TextEditingController phonenumbercontroller = TextEditingController();
   final TextEditingController clientname = TextEditingController();
+  final TextEditingController location = TextEditingController();
+  bool? checkedValue = false;
   Position? _currentPosition;
   _getCurrentLocation() async {
     Position position = await Geolocator.getCurrentPosition(
@@ -49,6 +51,7 @@ class _AddsiteState extends State<Addsite> {
           child: Padding(
             padding: const EdgeInsets.only(left: 10, right: 10),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SizedBox(
                   height: MediaQuery.of(context).size.height / 20,
@@ -193,12 +196,52 @@ class _AddsiteState extends State<Addsite> {
                   },
                 ),
                 SizedBox(
-                  height: MediaQuery.of(context).size.height / 20,
+                  height: MediaQuery.of(context).size.height / 70,
+                ),
+                Row(
+                  children: [
+                    Checkbox(
+                        activeColor: Colors.orange,
+                        value: checkedValue,
+                        onChanged: (newValue) {
+                          setState(() {
+                            checkedValue = newValue;
+                          });
+                        }),
+                    const Text(
+                      "Set your current location as your site location ",
+                      style: TextStyle(fontSize: 15),
+                    ),
+                  ],
+                ),
+
+                checkedValue != false
+                    ? Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          children: [
+                            _currentPosition == null
+                                ? const SizedBox.shrink()
+                                : Text(_currentPosition!.latitude.toString()),
+                            SizedBox(
+                                width: MediaQuery.of(context).size.width / 2),
+                            _currentPosition == null
+                                ? const SizedBox.shrink()
+                                : Text(_currentPosition!.longitude.toString()),
+                          ],
+                        ),
+                      )
+                    : const SizedBox.shrink(),
+
+                SizedBox(
+                  height: MediaQuery.of(context).size.height / 50,
                 ),
                 MaterialButton(
                   minWidth: double.infinity,
                   color: Colors.orange,
                   onPressed: () {
+                    //print("hello");
+                    //print(_currentPosition!.latitude.toString());
                     BlocProvider.of<MainBloc>(context).add(VerifyNewSite(
                       siteName: projectnamecontroller.text,
                       //password: passwordcontroller,

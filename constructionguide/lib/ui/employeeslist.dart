@@ -1,10 +1,13 @@
 import 'package:constructionguide/bloc/mainbloc.dart';
+import 'package:constructionguide/homepage.dart';
 import 'package:constructionguide/ui/addemployees.dart';
+import 'package:constructionguide/ui/editemployees.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class Employeeslist extends StatefulWidget {
-  const Employeeslist({super.key});
+  final String? id;
+  const Employeeslist({super.key, this.id});
 
   @override
   State<Employeeslist> createState() => _EmployeeslistState();
@@ -72,13 +75,14 @@ class _EmployeeslistState extends State<Employeeslist> {
                                       const Padding(
                                         padding: EdgeInsets.only(left: 20),
                                         child: CircleAvatar(
-                                            radius: 2,
+                                            backgroundColor: Colors.orange,
+                                            radius: 20,
                                             child: Icon(Icons.person)),
                                       ),
                                       SizedBox(
                                         width:
                                             MediaQuery.of(context).size.width /
-                                                6,
+                                                10,
                                       ),
                                       Column(
                                           crossAxisAlignment:
@@ -94,6 +98,7 @@ class _EmployeeslistState extends State<Employeeslist> {
                                             Text(state.employeeslistmodel
                                                 .data![index].name
                                                 .toString()),
+
                                             Text(state.employeeslistmodel
                                                 .data![index].status
                                                 .toString()),
@@ -109,6 +114,174 @@ class _EmployeeslistState extends State<Employeeslist> {
                                                         .height /
                                                     30),
                                           ]),
+                                      // SizedBox(
+                                      //   width:
+                                      //       MediaQuery.of(context).size.width /
+                                      //           6,
+                                      // ),
+                                      Flexible(
+                                        fit: FlexFit.tight,
+                                        child: PopupMenuButton(
+                                          onSelected: (value) {
+                                            print(value);
+                                          },
+                                          itemBuilder: (BuildContext context) {
+                                            return [
+                                              PopupMenuItem(
+                                                value: "Edit",
+                                                child: const Text('Edit'),
+                                                onTap: () {
+                                                  Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                          builder: (context) => EditEmployees(
+                                                              id: state
+                                                                  .employeeslistmodel
+                                                                  .data?[index]
+                                                                  .sId
+                                                                  .toString(),
+                                                              workid: state
+                                                                  .employeeslistmodel
+                                                                  .data![index]
+                                                                  .userId
+                                                                  .toString())));
+                                                },
+                                              ),
+                                              PopupMenuItem(
+                                                value: "Delete",
+                                                //child: const Text('Delete'),
+                                                onTap: () {
+                                                  BlocProvider.of<MainBloc>(
+                                                          context)
+                                                      .add(DeleteEmployees(
+                                                          id: state
+                                                              .employeeslistmodel
+                                                              .data![index]
+                                                              .sId
+                                                              .toString()));
+                                                },
+                                                child: BlocConsumer<MainBloc,
+                                                    MainStates>(
+                                                  builder: (context, state) {
+                                                    if (state is Loading) {
+                                                      return const CircularProgressIndicator();
+                                                    } else {
+                                                      return const Text(
+                                                          "Delete");
+                                                    }
+                                                  },
+                                                  listener: (context, state) {
+                                                    if (state
+                                                        is DeleteEmployeeSuccess) {
+                                                      Navigator.push(
+                                                          context,
+                                                          MaterialPageRoute(
+                                                              builder: (context) =>
+                                                                  const Employeeslist()));
+                                                    }
+                                                  },
+                                                ),
+
+                                                // ElevatedButton(
+                                                //   onPressed: () {
+                                                //     showDialog(
+                                                //       context: context,
+                                                //       builder: (ctx) =>
+                                                //           AlertDialog(
+                                                //         title: const Text(
+                                                //             "Alert Dialog Box"),
+                                                //         content: const Text(
+                                                //             "You have raised a Alert Dialog Box"),
+                                                //         actions: <Widget>[
+                                                //           TextButton(
+                                                //             onPressed: () {
+                                                //               Navigator.of(
+                                                //                       ctx)
+                                                //                   .pop();
+                                                //             },
+                                                //             child: Container(
+                                                //               color: Colors
+                                                //                   .green,
+                                                //               padding:
+                                                //                   const EdgeInsets
+                                                //                       .all(
+                                                //                       14),
+                                                //               child:
+                                                //                   const Text(
+                                                //                       "okay"),
+                                                //             ),
+                                                //           ),
+                                                //         ],
+                                                //       ),
+                                                //     );
+                                                //   },
+                                                //   child: const Text(
+                                                //       "Show alert Dialog box"),
+
+                                                // child: AlertDialog(
+                                                //   title: const Text(
+                                                //       'Do you want do delete the employee?'),
+                                                //   actions: [
+                                                //     TextButton(
+                                                //         child: const Text(
+                                                //             'Cancel'),
+                                                //         onPressed: () {
+                                                //           Navigator.push(
+                                                //               context,
+                                                //               MaterialPageRoute(
+                                                //                   builder:
+                                                //                       (context) =>
+                                                //                           const Employeeslist()));
+                                                //         }),
+                                                //     TextButton(
+                                                //       child: Text('Confirm'),
+                                                //       onPressed: () {
+                                                //         BlocProvider.of<
+                                                //                     MainBloc>(
+                                                //                 context)
+                                                //             .add(DeleteEmployees(
+                                                //                 id: state
+                                                //                     .employeeslistmodel
+                                                //                     .data![
+                                                //                         index]
+                                                //                     .sId
+                                                //                     .toString()));
+                                                //       },
+                                                // child: BlocConsumer<
+                                                //     MainBloc,
+                                                //     MainStates>(
+                                                //   builder:
+                                                //       (context, state) {
+                                                //     if (state
+                                                //         is Loading) {
+                                                //       return const CircularProgressIndicator();
+                                                //     } else {
+                                                //       return const Text(
+                                                //           "Delete");
+                                                //     }
+                                                //   },
+                                                //   listener:
+                                                //       (context, state) {
+                                                //     if (state
+                                                //         is DeleteEmployeeSuccess) {
+                                                //       Navigator.push(
+                                                //           context,
+                                                //           MaterialPageRoute(
+                                                //               builder:
+                                                //                   (context) =>
+                                                //                       const Employeeslist()));
+                                                //     }
+                                                //   },
+                                                // ),
+                                                //     )
+
+                                                //   ],
+                                                // ),
+                                              ),
+                                            ];
+                                          },
+                                        ),
+                                      ),
                                     ],
                                   ),
                                 ),

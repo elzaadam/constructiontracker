@@ -15,10 +15,14 @@ class MainBloc extends Bloc<MainEvents, MainStates> {
     on<VerifyAccount>(verifyaccount);
     on<GetSiteList>(getSiteList);
     on<GetSiteDetails>(getSiteDetails);
+
+    on<VerifyEdittedSite>(verifyEdittedSite);
     on<VerifyNewSite>(verifyNewSite);
     on<GetEmployeesList>(getEmployeesList);
     on<VerifyNewEmployee>(verifyNewEmployee);
     on<Categorylist>(categorylist);
+    on<DeleteEmployees>(deleteEmployees);
+    on<AssignEmployees>(assignEmployees);
   }
 
   Future<FutureOr<void>> verifyaccount(
@@ -129,6 +133,30 @@ class MainBloc extends Bloc<MainEvents, MainStates> {
     }
   }
 
+  // //Edit Site
+  // Future<FutureOr<void>> getEditSite(
+  //     GetEditSite event, Emitter<MainStates> emit) async {
+  //   Commonmodel commonmodel;
+  //   // emit(abd());
+  //   Map map = {"id": event.id, "position": event.position};
+  //   print(map);
+  //   try {
+  //     emit(Loading());
+  //     commonmodel = Commonmodel.fromJson(await WebClient.post(
+  //       '/client/edit/site',
+  //       map,
+  //     ));
+  //     if (commonmodel.status == true) {
+  //       emit(EditSiteSuccess());
+  //     } else {
+  //       emit(EditSiteError());
+  //     }
+  //   } catch (e) {
+  //     emit(EditSiteError());
+  //     log("Exception on authentication : $e");
+  //   }
+  // }
+
   Future<FutureOr<void>> getEmployeesList(
       GetEmployeesList event, Emitter<MainStates> emit) async {
     EmployeesListModel employeeslistmodel;
@@ -147,6 +175,39 @@ class MainBloc extends Bloc<MainEvents, MainStates> {
       }
     } catch (e) {
       emit(EmployeeslistError());
+      log("Exception on authentication : $e");
+    }
+  }
+
+  // verify editted site list
+  Future<FutureOr<void>> verifyEdittedSite(
+      VerifyEdittedSite event, Emitter<MainStates> emit) async {
+    Commonmodel commonmodel;
+    Map map = {
+      "id": event.id,
+      "siteName": event.siteName,
+      "siteLocation": event.siteLocation,
+      "work": event.work,
+      "siteContactAddress": event.siteContactAddress,
+      "siteContactPhone": event.siteContactPhone,
+      "contactPersonName": event.contactPersonName,
+      "lat": event.lat,
+      "lon": event.lon
+    };
+    print(map);
+    try {
+      emit(Loading());
+      commonmodel = Commonmodel.fromJson(await WebClient.post(
+        '/client/edit/site',
+        map,
+      ));
+      if (commonmodel.status == true) {
+        emit(EdittingSiteSuccess());
+      } else {
+        emit(EdittingSiteError());
+      }
+    } catch (e) {
+      emit(EdittingSiteError());
       log("Exception on authentication : $e");
     }
   }
@@ -207,6 +268,55 @@ class MainBloc extends Bloc<MainEvents, MainStates> {
       emit(AddingEmployeeError());
       log("Exception on authentication : $e");
     }
+  }
+}
+
+Future<FutureOr<void>> deleteEmployees(
+    DeleteEmployees event, Emitter<MainStates> emit) async {
+  Commonmodel commonmodel;
+
+  // emit(abd());
+  Map map = {"id": event.id};
+  print(map);
+  try {
+    emit(Loading());
+    commonmodel = Commonmodel.fromJson(await WebClient.post(
+      '/client/worker/delete',
+      map,
+    ));
+    if (commonmodel.status == true) {
+      emit(DeleteEmployeeSuccess());
+    } else {
+      emit(DeleteEmployeesError());
+    }
+  } catch (e) {
+    emit(DeleteEmployeesError());
+    log("Exception on authentication : $e");
+  }
+}
+
+// assignEmployees
+Future<FutureOr<void>> assignEmployees(
+    AssignEmployees event, Emitter<MainStates> emit) async {
+  Commonmodel commonmodel;
+
+  // emit(abd());
+  Map map = {"id": event.id};
+  print(map);
+  try {
+    emit(Loading());
+    commonmodel = Commonmodel.fromJson(await WebClient.post(
+      '/client/worker/assign/task',
+      map,
+    ));
+    if (commonmodel.status == true) {
+      emit(AssignEmployeesSuccess());
+    } else {
+      emit(AssignEmployeesError());
+    }
+  } catch (e) {
+    emit(AssignEmployeesError());
+    log("Exception on authentication : $e");
   }
 }
 
@@ -291,11 +401,9 @@ class AddingSiteError extends MainStates {
 }
 
 class GetSiteDetails extends MainEvents {
-  final String? id;
+  final String? id, position;
 
-  GetSiteDetails({
-    this.id,
-  });
+  GetSiteDetails({this.id, this.position});
 }
 
 class SitedetailsSuccess extends MainStates {
@@ -312,9 +420,59 @@ class SitedetailsError extends MainStates {
   SitedetailsError({this.error});
 }
 
+class GetEditSite extends MainEvents {
+  final String? id, position;
+
+  GetEditSite({
+    this.id,
+    this.position,
+  });
+}
+
+class EditSiteSuccess extends MainStates {}
+
+class EditSiteError extends MainStates {
+  final String? error;
+  EditSiteError({this.error});
+}
+
+class VerifyEdittedSite extends MainEvents {
+  final String? id,
+      siteName,
+      siteLocation,
+      work,
+      siteContactAddress,
+      siteContactPhone,
+      contactPersonName,
+      lat,
+      lon;
+  VerifyEdittedSite({
+    this.id,
+    this.siteName,
+    this.siteLocation,
+    this.work,
+    this.siteContactAddress,
+    this.siteContactPhone,
+    this.contactPersonName,
+    this.lat,
+    this.lon,
+  });
+}
+
+class EditSiteloading extends MainStates {}
+
+class EdittingSiteSuccess extends MainStates {}
+
+class EdittingSiteError extends MainStates {
+  final String? error;
+  EdittingSiteError({this.error});
+}
+
 class GetEmployeesList extends MainEvents {
-  final String? name, status, phone, district;
+  final String? id, workid, name, status, phone, district;
   GetEmployeesList({
+    this.id,
+    this.workid,
     this.name,
     this.status,
     this.phone,
@@ -374,4 +532,32 @@ class AddEmployeeSuccess extends MainStates {}
 class AddingEmployeeError extends MainStates {
   final String? error;
   AddingEmployeeError({this.error});
+}
+
+class DeleteEmployees extends MainEvents {
+  final String? id;
+
+  DeleteEmployees({this.id});
+}
+
+class DeleteEmployeeSuccess extends MainStates {}
+
+class DeleteEmployeesError extends MainStates {
+  final String? error;
+  DeleteEmployeesError({this.error});
+}
+
+class AssignEmployees extends MainEvents {
+  final String? id;
+
+  AssignEmployees({this.id});
+}
+
+class Assigning extends MainStates {}
+
+class AssignEmployeesSuccess extends MainStates {}
+
+class AssignEmployeesError extends MainStates {
+  final String? error;
+  AssignEmployeesError({this.error});
 }

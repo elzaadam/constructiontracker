@@ -4,6 +4,7 @@ import 'package:constructionguide/bloc/mainbloc.dart';
 import 'package:constructionguide/loginpage.dart';
 import 'package:constructionguide/prefmanager/prefManager.dart';
 import 'package:constructionguide/ui/addsite.dart';
+import 'package:constructionguide/ui/assigningemployees.dart';
 import 'package:constructionguide/ui/employeeslist.dart';
 import 'package:constructionguide/ui/sitedetails.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +12,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 //import 'package:lottie/lottie.dart';
 
 class Homepage extends StatefulWidget {
-  const Homepage({super.key});
+  const Homepage({super.key, String? id});
 
   @override
   State<Homepage> createState() => _HomepageState();
@@ -39,7 +40,8 @@ class _HomepageState extends State<Homepage> {
               child: Column(
             children: [
               const CircleAvatar(
-                radius: 40,
+                backgroundColor: Colors.orange,
+                radius: 20,
                 child: Icon(Icons.person),
               ),
               SizedBox(
@@ -111,15 +113,7 @@ class _HomepageState extends State<Homepage> {
                           itemCount: state.sitelistmodel.data!.length,
                           itemBuilder: (BuildContext context, index) {
                             return InkWell(
-                              onTap: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => Sitedetails(
-                                            id: state.sitelistmodel.data![index]
-                                                .sId)));
-                                print(state.sitelistmodel.data![index].sId);
-                              },
+                              onTap: () {},
                               child: Padding(
                                 padding: const EdgeInsets.only(
                                     top: 10, left: 15.0, bottom: 10, right: 15),
@@ -136,14 +130,15 @@ class _HomepageState extends State<Homepage> {
                                         const Padding(
                                           padding: EdgeInsets.only(left: 20),
                                           child: CircleAvatar(
-                                              radius: 2,
+                                              backgroundColor: Colors.orange,
+                                              radius: 20,
                                               child: Icon(Icons.person)),
                                         ),
                                         SizedBox(
                                             width: MediaQuery.of(context)
                                                     .size
                                                     .width /
-                                                5),
+                                                10),
 
                                         Column(
                                             crossAxisAlignment:
@@ -175,9 +170,73 @@ class _HomepageState extends State<Homepage> {
                                                           .height /
                                                       30),
                                             ]),
+                                        Flexible(
+                                          fit: FlexFit.tight,
+                                          child: PopupMenuButton(
+                                            shadowColor: Colors.orange,
+                                            onSelected: (value) {
+                                              print(value);
+                                            },
+                                            itemBuilder:
+                                                (BuildContext context) {
+                                              return [
+                                                PopupMenuItem(
+                                                  value: "Site details",
+                                                  child: const Text(
+                                                      'Site details'),
+                                                  onTap: () {
+                                                    Navigator.push(
+                                                        context,
+                                                        MaterialPageRoute(
+                                                            builder: (context) => Sitedetails(
+                                                                id: state
+                                                                    .sitelistmodel
+                                                                    .data![
+                                                                        index]
+                                                                    .sId,
+                                                                position: state
+                                                                    .sitelistmodel
+                                                                    .data![
+                                                                        index]
+                                                                    .location
+                                                                    .toString())));
+                                                    // print(state.sitelistmodel
+                                                    //     .data![index].sId);
+                                                    // print('GEllo');
+                                                    // print(state.sitelistmodel
+                                                    //     .data![index].location
+                                                    //     .toString());
+                                                  },
+                                                ),
+                                                PopupMenuItem(
+                                                  value: "Assign Employees",
+                                                  child: const Text(
+                                                      'Assign Employees'),
+                                                  onTap: () {
+                                                    Navigator.push(
+                                                        context,
+                                                        MaterialPageRoute(
+                                                            builder: (context) =>
+                                                                const AssigningEmployees()));
+                                                  },
+                                                ),
+                                              ];
+                                            },
+                                          ),
+                                        ),
                                         // onTap: (){
                                         //   Navigator.push(context, MaterialPageRoute(builder: (context)=>))
                                         // },
+
+                                        // Navigator.push(
+                                        //     context,
+                                        //     MaterialPageRoute(
+                                        //         builder: (context) => Sitedetails(
+                                        //             id: state
+                                        //                 .sitelistmodel.data![index].sId,
+                                        //             position: state.sitelistmodel
+                                        //                 .data![index].location
+                                        //                 .toString())));
                                       ],
                                     ),
                                   ),
